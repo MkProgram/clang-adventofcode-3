@@ -1,22 +1,28 @@
 #include "bank_processor.h"
+#include "joltage_calc.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 int process_banks_from_file(FILE *file) {
   char *line = NULL;
-  size_t len = 0;
+  size_t capacity = 0;
+  int result = 0;
+  ssize_t line_length;
 
-  while (getline(&line, &len, file) != -1) {
+  while ((line_length = getline(&line, &capacity, file)) != -1) {
     if (line[strspn(line, " \t\r\n")] == '\0')
       continue;
-
-    printf("The line is: %s\n", line);
+    while (line_length > 0 &&
+           (line[line_length - 1] == '\n' || line[line_length - 1] == '\r')) {
+      line[--line_length] = '\0';
+    }
+    result += get_joltage_from_gate(line);
   }
 
   if (line != NULL) {
     free(line);
   }
 
-  return 1;
+  return result;
 }

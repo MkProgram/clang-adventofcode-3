@@ -1,5 +1,4 @@
 #include "bank_processor.h"
-#include <_stdio.h>
 #include <stdio.h>
 #include <stdlib.h>
 
