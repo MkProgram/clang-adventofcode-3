@@ -19,7 +19,7 @@ $(BIN): build/$(BIN_NAME).o $(LIB_OBJS)
 	$(CC) $(CFLAGS) $(SANFLAGS) -o $@ $^
 
 build/%.o: src/%.c | build
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(SANFLAGS) -c $< -o $@
 
 build/%_test: tests/%_test.c $(LIB_OBJS) | build
 	$(CC) $(CFLAGS) $(SANFLAGS) -o $@ $< $(LIB_OBJS)

@@ -1,16 +1,17 @@
 #include "joltage_calc.h"
 #include <ctype.h>
 #include <inttypes.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
 static const int DIGITS = 12;
 
-unsigned char get_largest(char *gate, size_t *offset, size_t len) {
+unsigned char get_largest(const char *gate, size_t *offset, size_t len) {
   unsigned char largest = 0;
-  int largest_index = 0;
-  int start = (*offset == SIZE_MAX) ? 0 : *offset + 1;
+  size_t largest_index = 0;
+  size_t start = (*offset == SIZE_MAX) ? 0 : *offset + 1;
   for (size_t i = start; i < len; ++i) {
     unsigned char char_num = gate[i];
     if (!isdigit(char_num)) {
@@ -27,7 +28,7 @@ unsigned char get_largest(char *gate, size_t *offset, size_t len) {
   return largest;
 }
 
-uintmax_t get_joltage_from_gate(char *gate) {
+uintmax_t get_joltage_from_gate(const char *gate) {
 
   size_t len = strlen(gate);
   if (len < DIGITS) {

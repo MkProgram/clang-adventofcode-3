@@ -5,8 +5,8 @@
 #include <stdlib.h>
 
 typedef struct {
-  char *name;
-  char *gate;
+  const char *name;
+  const char *gate;
   uintmax_t expected;
 } JOLTAGE_GATE_CASE;
 
