@@ -1,4 +1,6 @@
 #include "bank_processor.h"
+#include <inttypes.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -12,11 +14,11 @@ int main(void) {
     fprintf(stderr, "Can't open file: %s\n", floc);
     return EXIT_FAILURE;
   }
-  int joltage = process_banks_from_file(file);
+  uintmax_t joltage = process_banks_from_file(file);
 
   fclose(file);
 
-  printf("Joltage is: %d\n", joltage);
+  printf("Joltage is: %" PRIuMAX "\n", joltage);
 
   return EXIT_SUCCESS;
 }

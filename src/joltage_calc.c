@@ -1,43 +1,47 @@
 #include "joltage_calc.h"
 #include <ctype.h>
+#include <inttypes.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
-int get_joltage_from_gate(char *gate) {
+static const int DIGITS = 12;
 
-  size_t len = strlen(gate);
-  if (len < 2) {
-    fprintf(stderr, "Gate must contain at least two numbers\n");
-    return 0;
-  }
-
-  int first = 0;
-  int second = 0;
-  size_t first_index = 0;
-
-  for (size_t i = 0; i < len - 1; ++i) {
+unsigned char get_largest(char *gate, size_t *offset, size_t len) {
+  unsigned char largest = 0;
+  int largest_index = 0;
+  int start = (*offset == SIZE_MAX) ? 0 : *offset + 1;
+  for (size_t i = start; i < len; ++i) {
     unsigned char char_num = gate[i];
     if (!isdigit(char_num)) {
       fprintf(stderr, "Non-number character found: %c\n", gate[i]);
       continue;
     }
     int num = char_num - '0';
-    if (num > first) {
-      first = num;
-      first_index = i;
+    if (num > (largest - '0')) {
+      largest = char_num;
+      largest_index = i;
     }
   }
-  for (size_t j = first_index + 1; j < len; ++j) {
-    unsigned char char_num = gate[j];
-    if (!isdigit(char_num)) {
-      fprintf(stderr, "Non-number character found: %c\n", gate[j]);
-      continue;
-    }
-    int num = char_num - '0';
-    if (num > second) {
-      second = num;
-    }
+  *offset = largest_index;
+  return largest;
+}
+
+uintmax_t get_joltage_from_gate(char *gate) {
+
+  size_t len = strlen(gate);
+  if (len < DIGITS) {
+    fprintf(stderr, "Gate must contain at least two numbers\n");
+    return 0;
   }
 
-  return (first * 10) + second;
+  size_t offset = SIZE_MAX;
+  char s[13];
+
+  for (size_t i = 0; i < DIGITS; ++i) {
+    s[i] = get_largest(gate, &offset, len - (DIGITS - i) + 1);
+  }
+  s[12] = '\0';
+
+  return strtoumax(s, NULL, 10);
 }

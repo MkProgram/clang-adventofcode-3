@@ -1,13 +1,14 @@
 #include "bank_processor.h"
 #include "joltage_calc.h"
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-int process_banks_from_file(FILE *file) {
+uintmax_t process_banks_from_file(FILE *file) {
   char *line = NULL;
   size_t capacity = 0;
-  int result = 0;
+  uintmax_t result = 0;
   ssize_t line_length;
 
   while ((line_length = getline(&line, &capacity, file)) != -1) {
